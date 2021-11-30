@@ -1,17 +1,45 @@
 <template>
   <div class="score-wrapper">
+    <!-- Main container and titles -->
     <div class="score" @click="toggleVersions">
       <p id="score-title">{{ title }}</p>
       <p id="score-composer">{{ composer }}</p>
       <p id="score-dancetype">{{ dancetype }}</p>
-      <div :class="{ hidden: mock }" class="icons score-icons">
+      <div class="icons score-icons">
         <i v-if="versionsActive" class="fas fa-chevron-circle-down fa-lg"></i>
         <i v-else class="fas fa-chevron-circle-up fa-lg"></i>
       </div>
     </div>
-    <div v-if="versionsActive" class="score-versions">
+
+    <!-- Description -->
+    <div v-if="versionsActive" class="information-container">
+      <div @click="toggleDescription" class="information-dropdown">
+        <p>Description</p>
+        <i class="fas fa-chevron-circle-up fa-lg"></i>
+      </div>
+
+      <hr v-if="descriptionActive" />
+
+      <!-- <div v-html="albumText"></div> -->
+      <div v-if="descriptionActive" class="score-description">
+        <h3>Description title.</h3>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae eaque,
+          expedita recusandae doloremque optio fuga. Harum doloribus sequi
+          cupiditate dolorem eius? Nesciunt doloribus consequatur necessitatibus
+          distinctio eaque adipisci assumenda laboriosam.
+        </p>
+      </div>
+    </div>
+
+    <!-- Audio -->
+
+    <!-- Video -->
+
+    <!-- Versions -->
+    <div v-if="versionsActive" class="information-container">
       <div v-for="version in versions" :key="version">
-        <div :class="{ noHover: mock }" @click="openPdf" class="score-version">
+        <div @click="openPdf" class="score-version">
           <p id="version-title">{{ version.name }}</p>
           <div class="icons">
             <i @click="openPdf" class="fas fa-expand-alt fa-lg"></i>
@@ -56,6 +84,7 @@ export default {
   data() {
     return {
       versionsActive: false,
+      descriptionActive: false,
       pdfActive: false,
       pdfLink: '',
     };
@@ -63,6 +92,9 @@ export default {
   methods: {
     toggleVersions() {
       this.versionsActive = !this.versionsActive;
+    },
+    toggleDescription() {
+      this.descriptionActive = !this.descriptionActive;
     },
     openPdf() {
       this.pdfActive = true;
@@ -154,13 +186,27 @@ export default {
   align-items: center;
 }
 
-.score-versions {
+.information-container {
   border: 1px solid rgba(14, 19, 57, 0.1);
   background-color: #fafafa;
   border-radius: 5px;
   margin-top: 10px;
 
   width: 92%;
+}
+
+.information-dropdown {
+  height: 75px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  cursor: pointer;
+}
+
+.score-description {
+  padding: 30px;
 }
 
 .score-version {
@@ -226,7 +272,7 @@ p {
     flex-direction: column;
   }
 
-  .score-versions {
+  .information-container {
     width: 100%;
   }
 
