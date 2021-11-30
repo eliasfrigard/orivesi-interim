@@ -24,6 +24,7 @@ export default {
 <style>
 .orange {
   color: #d57b01;
+  opacity: 1;
 }
 
 .score-header {
