@@ -124,7 +124,7 @@ td {
   font-family: 'Athiti', sans-serif;
   font-size: 20px;
   line-height: 35px;
-  margin: 0;
+  margin: 25px 0;
 }
 
 hr {

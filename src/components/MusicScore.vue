@@ -70,7 +70,7 @@
 
     <!-- Video -->
     <div
-      v-if="versionsActive && (videoArray || youtube)"
+      v-if="versionsActive && (videoArray.length > 0 || youtube)"
       class="information-container"
     >
       <div @click="toggleVideoContainer" class="information-dropdown">
@@ -87,7 +87,7 @@
         </div>
       </div>
 
-      <hr v-if="audioContainerActive" />
+      <hr v-if="videoContainerActive" />
 
       <div v-if="videoContainerActive" class="score-video">
         <div class="video-container">
@@ -201,8 +201,6 @@ export default {
       this.youtubeArray = this.youtube.split('\n');
       console.log(this.youtubeArray);
     }
-
-    console.log(this.videos);
   },
   methods: {
     toggleVersions() {
@@ -338,7 +336,7 @@ export default {
 }
 
 .score-wrapper {
-  margin: 10px 0;
+  margin: 20px 0;
 }
 
 .score {
@@ -396,6 +394,7 @@ export default {
 
 .score-description {
   padding: 30px;
+  width: 75%;
 }
 
 .score-version {
@@ -462,6 +461,13 @@ p {
   letter-spacing: 1px;
 }
 
+.score p,
+.container-title p,
+#version-title,
+#return-message {
+  margin: 0;
+}
+
 @media screen and (max-width: 1200px) {
   .score {
     flex-direction: column;
@@ -485,6 +491,11 @@ p {
 
   .score-icons {
     margin-top: 10px;
+  }
+
+  .score-description {
+    padding: 30px;
+    width: 100%;
   }
 }
 </style>
