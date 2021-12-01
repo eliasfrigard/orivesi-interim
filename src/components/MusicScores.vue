@@ -1,15 +1,5 @@
 <template>
   <div class="ui container">
-    <!--     <div class="titles">
-      <p id="score-title">Nuotti</p>
-      <p id="score-composer">Säveltäjä</p>
-      <p id="score-dancetype">Tanssilaji</p>
-
-      <div class="icons score-icons">
-        <i class="fas fa-chevron-circle-down fa-lg"></i>
-      </div>
-    </div> -->
-
     <MockScore
       title="Nimi"
       dancetype="Tanssilaji"
@@ -22,8 +12,12 @@
       :key="score.id"
       :title="score.Title"
       :dancetype="score.Dancetype"
+      :description="score.Description"
       :composer="score.Composer"
       :versions="score.Scores"
+      :audio="score.Audio"
+      :videoArray="score.Video"
+      :youtube="score.Youtube"
     />
   </div>
 </template>

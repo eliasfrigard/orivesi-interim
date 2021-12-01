@@ -7,6 +7,8 @@
       </div>
     </div>
     <MusicScores />
+
+    <br />
   </div>
 </template>
 

@@ -6,78 +6,139 @@
       <p id="score-composer">{{ composer }}</p>
       <p id="score-dancetype">{{ dancetype }}</p>
       <div class="icons score-icons">
-        <i v-if="versionsActive" class="fas fa-chevron-circle-down fa-lg"></i>
-        <i v-else class="fas fa-chevron-circle-up fa-lg"></i>
+        <i v-if="versionsActive" class="fas fa-arrow-alt-circle-down fa-lg"></i>
+        <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
       </div>
     </div>
 
     <!-- Description -->
-    <div v-if="versionsActive" class="information-container">
+    <div v-if="versionsActive && description" class="information-container">
       <div @click="toggleDescription" class="information-dropdown">
-        <p>Description</p>
-        <i class="fas fa-chevron-circle-up fa-lg"></i>
+        <div class="container-title">
+          <i class="fas fa-align-center"></i>
+          <p>Kuvaus / Sanat</p>
+        </div>
+        <div class="icons score-icons">
+          <i
+            v-if="descriptionActive"
+            class="fas fa-arrow-alt-circle-down fa-lg"
+          ></i>
+          <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
+        </div>
       </div>
 
       <hr v-if="descriptionActive" />
 
-      <!-- <div v-html="albumText"></div> -->
-      <div v-if="descriptionActive" class="score-description">
-        <h3>Description title.</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae eaque,
-          expedita recusandae doloremque optio fuga. Harum doloribus sequi
-          cupiditate dolorem eius? Nesciunt doloribus consequatur necessitatibus
-          distinctio eaque adipisci assumenda laboriosam.
-        </p>
-      </div>
+      <div
+        v-if="descriptionActive"
+        class="score-description"
+        v-html="descriptionSanitized"
+      ></div>
     </div>
 
     <!-- Audio -->
-    <div v-if="versionsActive" class="information-container">
+    <div
+      v-if="versionsActive && audio.length > 0"
+      class="information-container"
+    >
       <div @click="toggleAudioContainer" class="information-dropdown">
-        <p>Audio</p>
-        <i class="fas fa-chevron-circle-up fa-lg"></i>
+        <div class="container-title">
+          <i class="fas fa-music"></i>
+          <p>Äänitteet</p>
+        </div>
+        <div class="icons score-icons">
+          <i
+            v-if="audioContainerActive"
+            class="fas fa-arrow-alt-circle-down fa-lg"
+          ></i>
+          <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
+        </div>
       </div>
 
       <hr v-if="audioContainerActive" />
 
-      <!-- <div v-html="albumText"></div> -->
       <div v-if="audioContainerActive" class="score-audio">
-        <audio controls class="audio-players">
-          <source
-            src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/12_Mimas_2701ce1e8f.mp3"
-            type="audio/mpeg"
-          />
-          Your browser does not support the audio element.
-        </audio>
-
-        <audio controls class="audio-players">
-          <source
-            src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/12_Mimas_2701ce1e8f.mp3"
-            type="audio/mpeg"
-          />
-          Your browser does not support the audio element.
-        </audio>
-        <audio controls class="audio-players">
-          <source
-            src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/12_Mimas_2701ce1e8f.mp3"
-            type="audio/mpeg"
-          />
-          Your browser does not support the audio element.
-        </audio>
+        <div v-for="track in audio" :key="track.id" class="audio-wrapper">
+          <p class="audio-title">{{ track.name }}</p>
+          <audio controls class="audio-players">
+            <source :src="track.url" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
       </div>
     </div>
 
     <!-- Video -->
+    <div
+      v-if="versionsActive && (videoArray || youtube)"
+      class="information-container"
+    >
+      <div @click="toggleVideoContainer" class="information-dropdown">
+        <div class="container-title">
+          <i class="fas fa-video"></i>
+          <p>Videot</p>
+        </div>
+        <div class="icons score-icons">
+          <i
+            v-if="videoContainerActive"
+            class="fas fa-arrow-alt-circle-down fa-lg"
+          ></i>
+          <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
+        </div>
+      </div>
+
+      <hr v-if="audioContainerActive" />
+
+      <div v-if="videoContainerActive" class="score-video">
+        <div class="video-container">
+          <div
+            v-for="video in videoArray"
+            :key="video.id"
+            class="video-wrapper"
+          >
+            <p class="video-title">{{ video.name }}</p>
+
+            <iframe
+              width="467"
+              height="263"
+              :src="video.url"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+
+        <div class="video-container">
+          <div v-for="video in youtubeArray" :key="video" class="video-wrapper">
+            <iframe
+              width="467"
+              height="263"
+              :src="'https://www.youtube.com/embed/' + video"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Versions -->
     <div v-if="versionsActive" class="information-container">
       <div v-for="version in versions" :key="version">
-        <div @click="openPdf" class="score-version">
+        <div @click="openPdf(version.url, version.name)" class="score-version">
           <p id="version-title">{{ version.name }}</p>
           <div class="icons">
-            <i @click="openPdf" class="fas fa-expand-alt fa-lg"></i>
-            <a :href="version.url" download="download">
+            <i
+              @click="openPdf(version.url, version.name)"
+              class="fas fa-expand-alt fa-lg"
+            ></i>
+            <a @click="download(version.url, version.name)">
               <i class="fas fa-download fa-lg"></i>
             </a>
           </div>
@@ -97,23 +158,26 @@
         </div>
       </div>
 
-      <embed
-        id="pdf-viewer"
-        src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/Capri_Fischer_1ja2_V_Lja_Alttoviulustemma_ffe907d4b9.pdf"
-      />
+      <embed id="pdf-viewer" :src="pdfURL" />
     </div>
   </div>
 </template>
 
 <script>
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+
 export default {
   name: 'MusicScore',
   props: {
     title: String,
     dancetype: String,
     composer: String,
+    description: String,
     versions: Array,
-    mock: Boolean,
+    audio: Array,
+    videoArray: Array,
+    youtube: String,
   },
   data() {
     return {
@@ -123,11 +187,32 @@ export default {
       videoContainerActive: false,
       pdfActive: false,
       pdfLink: '',
+      descriptionSanitized: '',
+      youtubeArray: [],
+      pdfURL: '',
     };
+  },
+  created() {
+    if (this.description) {
+      this.descriptionSanitized = DOMPurify.sanitize(marked(this.description));
+    }
+
+    if (this.youtube) {
+      this.youtubeArray = this.youtube.split('\n');
+      console.log(this.youtubeArray);
+    }
+
+    console.log(this.videos);
   },
   methods: {
     toggleVersions() {
       this.versionsActive = !this.versionsActive;
+
+      if (this.versionsActive === false) {
+        this.descriptionActive = false;
+        this.audioContainerActive = false;
+        this.videoContainerActive = false;
+      }
     },
     toggleDescription() {
       this.descriptionActive = !this.descriptionActive;
@@ -135,14 +220,29 @@ export default {
     toggleAudioContainer() {
       this.audioContainerActive = !this.audioContainerActive;
     },
-    openPdf() {
-      this.pdfActive = true;
+    toggleVideoContainer() {
+      this.videoContainerActive = !this.videoContainerActive;
+    },
+    openPdf(URL, name) {
+      if (URL.split('.').pop() === 'pdf') {
+        this.pdfActive = true;
+        this.pdfURL = URL;
+      } else {
+        this.download(URL, name);
+      }
     },
     closePdf() {
       this.pdfActive = false;
     },
-    downloadScore(version) {
-      window.location.href = version.url;
+
+    download(URL, name) {
+      const anchor = document.createElement('a');
+      anchor.href = URL;
+      anchor.download = name;
+
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
     },
   },
 };
@@ -156,9 +256,10 @@ export default {
 .pdf-wrapper {
   background-color: #323639;
   top: 0;
+  z-index: 10;
   height: 100vh;
   width: 100%;
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: space-between;
 }
@@ -197,13 +298,43 @@ export default {
   position: absolute;
 }
 
-.score-audio {
+.score-audio,
+.score-video {
   padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.audio-players {
-  width: 47%;
-  margin: 10px;
+.audio-wrapper {
+  width: 48%;
+  margin: 10px 0;
+}
+
+.audio-players,
+.video-players {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.audio-title {
+  margin-bottom: 5px;
+}
+
+.video-title {
+  margin-bottom: 15px;
+}
+
+.video-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.video-wrapper {
+  margin-bottom: 30px;
+  display: inline;
 }
 
 .score-wrapper {
@@ -240,6 +371,17 @@ export default {
   margin-top: 10px;
 
   width: 92%;
+}
+
+.container-title {
+  display: flex;
+  align-items: center;
+  margin-left: -6px;
+}
+
+.container-title i {
+  margin-right: 20px;
+  color: #d57b01;
 }
 
 .information-dropdown {
@@ -323,6 +465,10 @@ p {
 @media screen and (max-width: 1200px) {
   .score {
     flex-direction: column;
+  }
+
+  .video-container {
+    justify-content: center;
   }
 
   .information-container {
