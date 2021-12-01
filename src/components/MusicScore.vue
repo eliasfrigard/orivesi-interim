@@ -33,6 +33,40 @@
     </div>
 
     <!-- Audio -->
+    <div v-if="versionsActive" class="information-container">
+      <div @click="toggleAudioContainer" class="information-dropdown">
+        <p>Audio</p>
+        <i class="fas fa-chevron-circle-up fa-lg"></i>
+      </div>
+
+      <hr v-if="audioContainerActive" />
+
+      <!-- <div v-html="albumText"></div> -->
+      <div v-if="audioContainerActive" class="score-audio">
+        <audio controls class="audio-players">
+          <source
+            src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/12_Mimas_2701ce1e8f.mp3"
+            type="audio/mpeg"
+          />
+          Your browser does not support the audio element.
+        </audio>
+
+        <audio controls class="audio-players">
+          <source
+            src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/12_Mimas_2701ce1e8f.mp3"
+            type="audio/mpeg"
+          />
+          Your browser does not support the audio element.
+        </audio>
+        <audio controls class="audio-players">
+          <source
+            src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/12_Mimas_2701ce1e8f.mp3"
+            type="audio/mpeg"
+          />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
 
     <!-- Video -->
 
@@ -56,7 +90,7 @@
       <div class="pdf-controls">
         <div @click="closePdf" class="left-controls">
           <i class="fas fa-arrow-left"></i>
-          <p id="return-message">Palaa takaisin nuottisivulle.</p>
+          <p id="return-message"><b>Palaa takaisin nuottisivulle.</b></p>
         </div>
         <div @click="closePdf" class="right-controls">
           <i class="fas fa-times"></i>
@@ -85,6 +119,8 @@ export default {
     return {
       versionsActive: false,
       descriptionActive: false,
+      audioContainerActive: false,
+      videoContainerActive: false,
       pdfActive: false,
       pdfLink: '',
     };
@@ -95,6 +131,9 @@ export default {
     },
     toggleDescription() {
       this.descriptionActive = !this.descriptionActive;
+    },
+    toggleAudioContainer() {
+      this.audioContainerActive = !this.audioContainerActive;
     },
     openPdf() {
       this.pdfActive = true;
@@ -158,6 +197,15 @@ export default {
   position: absolute;
 }
 
+.score-audio {
+  padding: 30px;
+}
+
+.audio-players {
+  width: 47%;
+  margin: 10px;
+}
+
 .score-wrapper {
   margin: 10px 0;
 }
@@ -173,7 +221,6 @@ export default {
   border: 1px solid rgba(14, 19, 57, 0.1);
   border-radius: 5px;
   padding: 20px;
-  transition: all 100ms ease-in-out;
 }
 
 .score p {
@@ -196,7 +243,7 @@ export default {
 }
 
 .information-dropdown {
-  height: 75px;
+  height: 60px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -217,7 +264,6 @@ export default {
   padding: 10px 30px;
   word-break: break-word;
   cursor: pointer;
-  transition: all 100ms ease-in-out;
 }
 
 #version-title {
@@ -225,7 +271,14 @@ export default {
 }
 
 .score:hover,
-.score-version:hover {
+.score-version:hover,
+.information-dropdown:hover {
+  transition: all 75ms ease-in-out;
+}
+
+.score:hover,
+.score-version:hover,
+.information-dropdown:hover {
   background-color: #f3f3f3;
 }
 
