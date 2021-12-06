@@ -4,14 +4,14 @@
       <p id="score-title">{{ title }}</p>
       <p id="score-composer">{{ composer }}</p>
       <p id="score-dancetype">{{ dancetype }}</p>
-      <div :class="{ hidden: mock }" class="icons score-icons">
+      <div class="icons score-icons hidden">
         <i v-if="versionsActive" class="fas fa-chevron-circle-down fa-lg"></i>
         <i v-else class="fas fa-chevron-circle-up fa-lg"></i>
       </div>
     </div>
     <div v-if="versionsActive" class="score-versions">
       <div v-for="version in versions" :key="version">
-        <div :class="{ noHover: mock }" class="score-version">
+        <div class="score-version hidden">
           <p id="version-title">{{ version.name }}</p>
           <div class="icons">
             <i class="fas fa-expand-alt fa-lg"></i>
@@ -51,7 +51,6 @@ export default {
     dancetype: String,
     composer: String,
     versions: Array,
-    mock: Boolean,
   },
   data() {
     return {

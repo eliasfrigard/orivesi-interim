@@ -5,10 +5,8 @@
       <p id="score-title">{{ title }}</p>
       <p id="score-composer">{{ composer }}</p>
       <p id="score-dancetype">{{ dancetype }}</p>
-      <div class="icons score-icons">
-        <i v-if="versionsActive" class="fas fa-arrow-alt-circle-down fa-lg"></i>
-        <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
-      </div>
+
+      <StatusIcon :open="versionsActive" />
     </div>
 
     <!-- Description -->
@@ -18,13 +16,8 @@
           <i class="fas fa-align-center"></i>
           <p>Kuvaus / Sanat</p>
         </div>
-        <div class="icons score-icons">
-          <i
-            v-if="descriptionActive"
-            class="fas fa-arrow-alt-circle-down fa-lg"
-          ></i>
-          <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
-        </div>
+
+        <StatusIcon :open="descriptionActive" />
       </div>
 
       <hr v-if="descriptionActive" />
@@ -46,13 +39,8 @@
           <i class="fas fa-music"></i>
           <p>Äänitteet</p>
         </div>
-        <div class="icons score-icons">
-          <i
-            v-if="audioContainerActive"
-            class="fas fa-arrow-alt-circle-down fa-lg"
-          ></i>
-          <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
-        </div>
+
+        <StatusIcon :open="audioContainerActive" />
       </div>
 
       <hr v-if="audioContainerActive" />
@@ -78,13 +66,8 @@
           <i class="fas fa-video"></i>
           <p>Videot</p>
         </div>
-        <div class="icons score-icons">
-          <i
-            v-if="videoContainerActive"
-            class="fas fa-arrow-alt-circle-down fa-lg"
-          ></i>
-          <i v-else class="fas fa-arrow-alt-circle-left fa-lg"></i>
-        </div>
+
+        <StatusIcon :open="videoContainerActive" />
       </div>
 
       <hr v-if="videoContainerActive" />
@@ -164,11 +147,16 @@
 </template>
 
 <script>
+import StatusIcon from '@/components/StatusIcon.vue';
+
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 
 export default {
   name: 'MusicScore',
+  components: {
+    StatusIcon,
+  },
   props: {
     title: String,
     dancetype: String,
@@ -199,7 +187,6 @@ export default {
 
     if (this.youtube) {
       this.youtubeArray = this.youtube.split('\n');
-      console.log(this.youtubeArray);
     }
   },
   methods: {
@@ -466,6 +453,15 @@ p {
 #version-title,
 #return-message {
   margin: 0;
+}
+
+.icon-default {
+  transition: transform 0.3s;
+}
+
+.icon-hover {
+  transition: transform 0.3s;
+  transform: rotate(-90deg);
 }
 
 @media screen and (max-width: 1200px) {
