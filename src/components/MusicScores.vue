@@ -39,9 +39,11 @@ export default {
     };
   },
   created() {
-    axios.get('https://orivesiallstars.net/music-scores').then((response) => {
-      this.musicScores = response.data;
-    });
+    axios
+      .get('https://orivesiadmin.net/music-scores?_sort=Title:asc')
+      .then((response) => {
+        this.musicScores = response.data;
+      });
   },
 };
 </script>
