@@ -111,13 +111,9 @@ export default {
   position: absolute;
 }
 
-.score-wrapper {
-  margin: 10px 0;
-}
-
 .score {
   display: flex;
-  min-height: 75px;
+  min-height: 50px;
   align-items: center;
   justify-content: space-around;
   width: 100%;

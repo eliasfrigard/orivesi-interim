@@ -121,7 +121,8 @@
               @click="openPdf(version.url, version.name)"
               class="fas fa-expand-alt fa-lg"
             ></i>
-            <a @click="download(version.url, version.name)">
+            <!-- <a @click="download(version.url, version.name)"> -->
+            <a @click.stop="download(version.url, version.name)">
               <i class="fas fa-download fa-lg"></i>
             </a>
           </div>
@@ -224,6 +225,7 @@ export default {
       const anchor = document.createElement('a');
       anchor.href = URL;
       anchor.download = name;
+      anchor.target = '_blank';
 
       document.body.appendChild(anchor);
       anchor.click();
