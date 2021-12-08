@@ -82,8 +82,9 @@
             <p class="video-title">{{ video.name }}</p>
 
             <iframe
-              width="467"
-              height="263"
+              class="video-frame"
+              :height="videoHeight"
+              :width="videoWidth"
               :src="video.url"
               title="YouTube video player"
               frameborder="0"
@@ -97,8 +98,9 @@
         <div class="video-container">
           <div v-for="video in youtubeArray" :key="video" class="video-wrapper">
             <iframe
-              width="467"
-              height="263"
+              class="video-frame"
+              :height="videoHeight"
+              :width="videoWidth"
               :src="'https://www.youtube.com/embed/' + video"
               title="YouTube video player"
               frameborder="0"
@@ -113,7 +115,7 @@
 
     <!-- Versions -->
     <div v-if="versionsActive" class="information-container">
-      <div v-for="version in versions" :key="version">
+      <div v-for="version in versions" :key="version.id">
         <div @click="openPdf(version.url, version.name)" class="score-version">
           <p id="version-title">{{ version.name }}</p>
           <div class="icons">
@@ -167,6 +169,25 @@ export default {
     audio: Array,
     videoArray: Array,
     youtube: String,
+  },
+  computed: {
+    videoHeight: function () {
+      return this.videoWidth * 0.5632;
+    },
+    videoWidth: function () {
+      const informationContainerWidth = document.querySelectorAll(
+        '.information-container'
+      )[0].offsetWidth;
+
+      // If mobile, return 100%.
+      if (this.isMobile) return informationContainerWidth - 60;
+
+      // Else return part of div as value.
+      return (informationContainerWidth - 60) * 0.48;
+    },
+    isMobile: function () {
+      return window.innerWidth < 768;
+    },
   },
   data() {
     return {
@@ -323,6 +344,12 @@ export default {
 .video-wrapper {
   margin-bottom: 30px;
   display: inline;
+}
+
+.video-frame {
+  /*   width: 467px;
+  height: 263px;
+ */
 }
 
 .score-wrapper {
@@ -494,6 +521,16 @@ p {
 
   .score-description {
     padding: 30px;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #version-title {
+    width: 70%;
+  }
+
+  .audio-wrapper {
     width: 100%;
   }
 }

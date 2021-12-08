@@ -144,4 +144,11 @@ a {
 a:hover {
   color: var(--accent-hover);
 }
+
+@media screen and (max-width: 768px) {
+  .titles h1 {
+    margin-top: 20px;
+    font-size: 30px;
+  }
+}
 </style>

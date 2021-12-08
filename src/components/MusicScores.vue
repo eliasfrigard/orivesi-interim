@@ -1,6 +1,7 @@
 <template>
   <div class="ui container">
     <MockScore
+      v-if="!isMobile"
       title="Nimi"
       dancetype="Tanssilaji"
       composer="Säveltäjä"
@@ -44,6 +45,11 @@ export default {
       .then((response) => {
         this.musicScores = response.data;
       });
+  },
+  computed: {
+    isMobile: function () {
+      return window.innerWidth < 768;
+    },
   },
 };
 </script>
