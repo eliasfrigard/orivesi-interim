@@ -192,6 +192,7 @@ i:hover {
 }
 
 p {
+  margin: 0;
   letter-spacing: 1px;
 }
 
@@ -214,6 +215,10 @@ p {
 
   .score-icons {
     margin-top: 10px;
+  }
+
+  .score-wrapper {
+    display: none;
   }
 }
 </style>

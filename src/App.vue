@@ -150,5 +150,15 @@ a:hover {
     margin-top: 20px;
     font-size: 30px;
   }
+
+  .titles {
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .titles {
+    margin: 50px 0;
+  }
 }
 </style>
