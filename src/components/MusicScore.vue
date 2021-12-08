@@ -291,6 +291,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: flex-end;
 }
 
 .audio-wrapper {
@@ -301,7 +302,7 @@ export default {
 .audio-players,
 .video-players {
   width: 100%;
-  margin: 10px 0;
+  margin: 20px 0;
 }
 
 .audio-title {
