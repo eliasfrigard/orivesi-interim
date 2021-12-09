@@ -154,6 +154,7 @@ import StatusIcon from '@/components/StatusIcon.vue';
 
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
+import axios from 'axios';
 
 export default {
   name: 'MusicScore',
@@ -243,14 +244,21 @@ export default {
     },
 
     download(URL, name) {
-      const anchor = document.createElement('a');
-      anchor.href = URL;
-      anchor.download = name;
-      anchor.target = '_blank';
-
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
+      axios({
+        responseType: 'blob',
+        url: URL,
+        method: 'get',
+        headers: {
+          'response-content-disposition': 'attachment',
+        },
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+      });
     },
   },
 };
