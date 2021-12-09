@@ -464,7 +464,8 @@ i:hover {
 }
 
 #score-title {
-  width: 540px;
+  word-wrap: break-word;
+  width: 495px;
 }
 
 #score-composer {
@@ -472,7 +473,7 @@ i:hover {
 }
 
 #score-dancetype {
-  width: 130px;
+  width: 145px;
 }
 
 #score-dancetype,

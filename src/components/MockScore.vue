@@ -1,9 +1,48 @@
 <template>
   <div class="score-wrapper">
     <div class="score">
-      <p id="score-title">{{ title }}</p>
-      <p id="score-composer">{{ composer }}</p>
-      <p id="score-dancetype">{{ dancetype }}</p>
+      <div class="title-btn score-header" @click="toggleScoreOrder('Title')">
+        <p id="score-title">
+          {{ title }}
+        </p>
+        <StatusIcon
+          class="mock-status-icon"
+          size="18px"
+          iconType="fa-arrow-up"
+          rotation="rotate(-180deg)"
+          :open="titleDirection"
+        />
+      </div>
+      <div
+        class="composer-btn score-header"
+        @click="toggleScoreOrder('Composer')"
+      >
+        <p id="score-composer">
+          {{ composer }}
+        </p>
+        <StatusIcon
+          class="mock-status-icon"
+          size="18px"
+          iconType="fa-arrow-up"
+          rotation="rotate(-180deg)"
+          :open="composerDirection"
+        />
+      </div>
+      <div
+        class="dancetype-btn score-header"
+        @click="toggleScoreOrder('Dancetype')"
+      >
+        <p id="score-dancetype">
+          {{ dancetype }}
+        </p>
+        <StatusIcon
+          class="mock-status-icon"
+          size="18px"
+          iconType="fa-arrow-up"
+          rotation="rotate(-180deg)"
+          :open="dancetypeDirection"
+        />
+      </div>
       <div class="icons score-icons hidden">
         <i v-if="versionsActive" class="fas fa-chevron-circle-down fa-lg"></i>
         <i v-else class="fas fa-chevron-circle-up fa-lg"></i>
@@ -23,27 +62,12 @@
         <hr />
       </div>
     </div>
-
-    <div v-if="pdfActive" class="pdf-wrapper">
-      <div class="pdf-controls">
-        <div class="left-controls">
-          <i class="fas fa-arrow-left"></i>
-          <p id="return-message">Palaa takaisin nuottisivulle.</p>
-        </div>
-        <div class="right-controls">
-          <i class="fas fa-times"></i>
-        </div>
-      </div>
-
-      <embed
-        id="pdf-viewer"
-        src="https://orivesi-strapi-bucket.s3.eu-north-1.amazonaws.com/Capri_Fischer_1ja2_V_Lja_Alttoviulustemma_ffe907d4b9.pdf"
-      />
-    </div>
   </div>
 </template>
 
 <script>
+import StatusIcon from '@/components/StatusIcon.vue';
+
 export default {
   name: 'MusicScore',
   props: {
@@ -52,17 +76,63 @@ export default {
     composer: String,
     versions: Array,
   },
+  components: {
+    StatusIcon,
+  },
+  methods: {
+    toggleScoreOrder(identifier) {
+      let direction = '';
+
+      switch (identifier) {
+        case 'Title':
+          this.titleDirection = !this.titleDirection;
+          direction = this.titleDirection;
+          break;
+        case 'Composer':
+          this.composerDirection = !this.composerDirection;
+          direction = this.composerDirection;
+          break;
+        case 'Dancetype':
+          this.dancetypeDirection = !this.dancetypeDirection;
+          direction = this.dancetypeDirection;
+          break;
+      }
+
+      if (direction) {
+        direction = 'asc';
+      } else {
+        direction = 'desc';
+      }
+
+      this.$emit('toggle-order', identifier, direction);
+    },
+  },
   data() {
     return {
       versionsActive: false,
       pdfActive: false,
       pdfLink: '',
+      // True === asc.
+      // False === desc.
+      titleDirection: true,
+      composerDirection: true,
+      dancetypeDirection: true,
     };
   },
 };
 </script>
 
+<style>
+.score-header:hover .mock-status-icon i {
+  color: #d57b01;
+}
+</style>
+
 <style scoped>
+.score-header {
+  margin: 0;
+}
+
 .hidden {
   opacity: 0;
 }
@@ -171,24 +241,41 @@ i:hover {
   color: #d57b01;
 }
 
-#score-title {
+.title-btn,
+.dancetype-btn,
+.composer-btn {
+  cursor: pointer;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.title-btn {
   font-size: 24px;
-  width: 540px;
+  width: 525px;
 }
 
-#score-composer {
+.composer-btn {
   width: 200px;
+  justify-content: center;
 }
 
-#score-dancetype {
-  width: 130px;
+.dancetype-btn {
+  width: 145px;
+  justify-content: center;
 }
 
-#score-dancetype,
-#score-composer {
+.dancetype-btn,
+.composer-btn {
   font-size: 20px;
   font-weight: bold;
   text-align: center;
+}
+
+#score-title,
+#score-dancetype,
+#score-composer {
+  margin-right: 5px;
 }
 
 p {

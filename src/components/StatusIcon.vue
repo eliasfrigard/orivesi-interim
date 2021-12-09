@@ -1,7 +1,17 @@
 <template>
   <div class="icons score-icons">
-    <i v-if="open" class="fas icon-active fa-arrow-alt-circle-left fa-lg"></i>
-    <i v-else class="fas icon-default fa-arrow-alt-circle-left fa-lg"></i>
+    <i
+      v-if="open"
+      :style="{ transform: rotation, fontSize: size }"
+      :class="iconType"
+      class="fas icon-active fa-lg"
+    ></i>
+    <i
+      v-else
+      :style="{ fontSize: size }"
+      :class="iconType"
+      class="fas icon-default fa-lg"
+    ></i>
   </div>
 </template>
 
@@ -9,14 +19,33 @@
 export default {
   name: 'StatusIcon',
   props: {
-    open: Boolean,
+    open: {
+      type: Boolean,
+    },
+    rotation: {
+      type: String,
+      default: 'rotate(-90deg)',
+    },
+    iconType: {
+      type: String,
+      default: 'fa-arrow-alt-circle-left',
+    },
+    size: {
+      type: String,
+      default: '22px',
+    },
   },
 };
 </script>
 
 <style scoped>
+.score-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 i {
-  font-size: 22px;
   margin: 0 8px;
   opacity: 0.75;
   color: black;
@@ -33,6 +62,5 @@ i:hover {
 
 .icon-active {
   transition: transform 0.3s;
-  transform: rotate(-90deg);
 }
 </style>

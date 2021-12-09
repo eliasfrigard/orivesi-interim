@@ -1,6 +1,7 @@
 <template>
   <div class="ui container">
     <MockScore
+      @toggle-order="toggleOrder"
       title="Nimi"
       dancetype="Tanssilaji"
       composer="Säveltäjä"
@@ -36,14 +37,32 @@ export default {
   data() {
     return {
       musicScores: [],
+      // Initial sort values.
+      sortParameter: 'Title',
+      sortDirection: 'asc',
     };
   },
+  computed: {
+    sortOrder() {
+      return '?_sort=' + this.sortParameter + ':' + this.sortDirection;
+    },
+  },
   created() {
-    axios
-      .get('https://orivesiadmin.net/music-scores?_sort=Title:asc')
-      .then((response) => {
-        this.musicScores = response.data;
-      });
+    this.getScores();
+  },
+  methods: {
+    toggleOrder(identifier, direction) {
+      this.sortParameter = identifier;
+      this.sortDirection = direction;
+      this.getScores();
+    },
+    getScores() {
+      axios
+        .get('https://orivesiadmin.net/music-scores' + this.sortOrder)
+        .then((response) => {
+          this.musicScores = response.data;
+        });
+    },
   },
 };
 </script>
@@ -59,24 +78,6 @@ export default {
 .titles p {
   font-weight: bold;
   font-size: 30px;
-}
-
-#score-title {
-  width: 540px;
-  font-size: 30px;
-  margin-left: -4px;
-}
-
-#score-composer {
-  width: 200px;
-  text-align: center;
-  font-size: 23px;
-}
-
-#score-dancetype {
-  width: 130px;
-  text-align: center;
-  font-size: 23px;
 }
 
 i {
